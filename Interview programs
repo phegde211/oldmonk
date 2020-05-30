@@ -1,0 +1,28 @@
+1. Remove all occurances of a value in a single linked list.
+
+void remove(struct llnode **head, int val)
+{
+    struct llnode *trav, *prev, *del;
+    trav = prev = NULL;
+    while (trav) {
+          if (trav->data == val) {
+              del = trav;
+          }
+          if (!del) {
+              if (!prev) {
+                  *head = trav;
+              }
+              prev = trav;
+          }
+          trav = trav->next;
+          if (del) {
+              free(del);
+              del = NULL;
+              if (prev) {
+                  prev->next = trav;
+          }
+    }
+}
+
+
+2. 
