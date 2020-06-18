@@ -22,6 +22,9 @@ void remove(struct llnode **head, int val)
                   prev->next = trav;
           }
     }
+    if (!prev) {
+        *head = NULL;
+    }
 }
 
 
