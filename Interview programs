@@ -1,3 +1,6 @@
+Try checking this out - https://leetcode.com/list/xb4m49lh
+
+
 1. Remove all occurances of a value in a single linked list.
 
 void remove(struct llnode **head, int val)
@@ -97,4 +100,33 @@ int func(int *a, int len, int sum)
         return 0;
 }
 
-5. 
+5. Given a string, find the length of the longest substring without repeating characters.
+Example 1:
+Input: "abcabcbb"
+Output: 3 
+Explanation: The answer is "abc", with the length of 3. 
+
+Example 2:
+Input: "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+
+
+#define MAX(a,b)  (a)>(b)?(a):(b)
+
+int lengthOfLongestSubstring(char * s){
+    int i, j, max, count;
+    int a[256];
+    i = j = 0;
+    max = 0;
+    memset(a, -1, 256);
+    while (*s != '\0') {
+        if ((a[s[j]] > 0) && (i <= a[s[j]])) {
+            i = a[s[j]]+1;
+            max = MAX(count, max);
+            count = 0;
+        }
+        count++;
+        a[s[j]] = j;
+        j++;
+    }
