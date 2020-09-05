@@ -130,3 +130,71 @@ int lengthOfLongestSubstring(char * s){
         a[s[j]] = j;
         j++;
     }
+
+6. Group all anagrams together. 
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Example 2:
+
+Input: strs = [""]
+Output: [[""]]
+
+Example 3:
+
+Input: strs = ["a"]
+Output: [["a"]]
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int char_cmp(const void *a, const void *b)
+{   
+    return (*(char *)a - *(char *)b);
+}
+
+int string_cmp(const void *a, const void *b)
+{   
+    const char **ia = (const char **)a;
+    const char **ib = (const char **)b;
+    return strcmp(*ia, *ib);
+}
+
+int main(int argc, char **argv)
+{
+    int len = argc-1;
+    int i;
+    char *words[len];
+    for (int i=0; i<len; i++) {
+        words[i]=argv[i+1];
+    }
+
+    /* for (int i=0; i<len; i++) {
+        words[i][0] = 'A';
+    }*/
+    printf("\n Before sort");
+    printf("\n");
+    for (i=0; i<len; i++) {
+        printf("words[%d] = %s,  ", i, words[i]);
+    }
+    printf("\n Sorting each word\n");
+
+    for (i=0; i<len; i++) {
+        qsort(words[i], strlen(words[i]), sizeof(char), char_cmp);
+    }
+    for (i=0; i<len; i++) {
+        printf("words[%d] = %s,  ", i, words[i]);
+    }
+
+    printf("\n");
+    qsort(words, len, sizeof(char *), string_cmp);
+    printf("After sort\n");
+    for (i=0; i<len; i++) {
+        printf("words[%d] = %s,  ", i, words[i]);
+    }
+    printf("\n");
+    return 0;
+}
+-> now do strncmp() of each words & print the anagrams. 
