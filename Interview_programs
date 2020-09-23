@@ -30,6 +30,30 @@ void remove(struct llnode **head, int val)
     }
 }
 
+or:
+void remove(Lnode **head, int val)
+{
+     Lnode *cur, *prev;
+     cur = *head;
+     while (cur) {
+          if(cur->data == val) {
+	  	if (prev) {
+			prev->next = cur->next;
+			free(cur);
+			cur = prev->next;
+	        } else {
+			*head = cur->next;
+			free(cur);
+			cur = *head;
+	  } else {
+	  	prev = cur;
+		cur = cur->next;
+	  }
+     }
+     return;
+}
+	 
+
 
 2. Maximum Subarray
  Find the contiguous subarray within an array (containing at least one number) which has the largest sum.For example, given the array [-2,1,-3,4,-1,2,1,-5,4],
