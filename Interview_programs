@@ -135,27 +135,32 @@ Input: "bbbbb"
 Output: 1
 Explanation: The answer is "b", with the length of 1.
 
+Example 3: Input: "pwwkew". ans = 3.
 
 #define MAX(a,b)  (a)>(b)?(a):(b)
-
-int lengthOfLongestSubstring(char * s){
-    int i, j, maxC, count;
-    int a[256];
-    i = j = 0;
-    maxC = 0;
-    memset(a, -1, 256);
-    while (*s != '\0') {
-        if ((a[s[j]] >= 0) && (i <= a[s[j]])) {
-            i = a[s[j]]+1;
-            a[sj]] = j;
-            j++;
-            countinue;
+int lengthOfLongestSubstring(char * s)
+{
+    int i, j, ans, len;
+    int LT[256] = { 0 };
+    
+    len = strlen(s);
+    i = j = ans = 0;
+    while (j < len) {
+        if (!LT[s[j]]) {
+            LT[s[j]]++;
+        } else {
+            ans = MAX(ans, j-i);
+            while (s[i] != s[j]) {
+                LT[s[i]] = 0;
+                i++;
+            }
+            i++;
         }
-        a[s[j]] = j;
-        count = (j -i)+1;
         j++;
-        maxC = MAX(maxC, count);
     }
+    ans = MAX(ans, len-i);
+    return ans;
+}
 
 6. Group all anagrams together. 
 Input: strs = ["eat","tea","tan","ate","nat","bat"]
