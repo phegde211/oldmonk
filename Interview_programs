@@ -270,35 +270,103 @@ int expandAroundCenter(char *s, int len, int left, int right) {
     return (R - L - 1);
 }
 
-8. Inorder traversal of binary tree (Iterative).
+8. Tree traversals using only stacks.
+Why?
+- using stacks means you are using DFS mehtod. The advantage comes from space complexity wherein the assumption is that a tree is more wider than is deeper. 
+So by using queues we need to store all the current level nodes before moving to the next level (something like level order traversal). 
+
+A) inorder traversal.
 
 void inOrderTraversal(Node *root)
 {
-	// Create an empty stack.
-	stack<Node*> stack;
+	struct stack *S = createStack(capacity = number of nodes in the tree);
+	struct tnode *cur = root;
 
-	// Start from the root node.
-	Node *curr = root;
-
-	// If the current node is null and stack is also empty, the algorithm terminates.
-	while (!stack.empty() || curr != NULL)
-	{
-    // Push the current node to the stack and set current=current->left.
+	/* Note unlike others, the stack is empty while entering the while loop & the 1st
+	 * node gets pushed inside the while loop
+	 */
+	while (!isEmpty(S) || curr != NULL)
+	{       
+		/* Loop over untill all the left nodes are pushed to the stack */
 		if (curr != NULL)
 		{
-			stack.push(curr);
+			push(S, cur);
 			curr = curr->left;
 		}
 		else // If the curr node is NULL.
 		{
-			curr = stack.top(); 
-			stack.pop(); // Pop the node on top of stack.
-			cout << curr->data << " "; // Print it.
+			curr = pop(S) 
+			printf("%d\t", curr);
 			curr = curr->right; 
 		}
 	}
 }
 
+B)  Postorder traversal
 
-9. 
+void postorder(struct tnode *root)
+{
+	struct stack *S = createStack(number of nodes in tree);
+	struct tnode *cur = root;
+	struct tnode *prev = NULL;
+	
+	while (!isEmpty(S) || cur != NULL) {
+		if(cur != NULL) {  /* Keep pushing the left elements */
+			push(S, cur);
+			cur = cur->left 
+		} else {
+			/* we are now processing elements on the way back */
+			cur = peek(S);  /* fetch the stack top, dont pop it yet */
+			if (cur->right == NULL || cur->right == prev) {
+				printf("%d\t", cur);
+				prev = pop(S);
+				cur = NULL;
+			} else {
+				/* Traverse the right elements */
+				cur = cur->right;
+			}
+		}
+	}
+}
 
+C) Preorder traversal   (easiest of all)
+void preorder(tnode *root) 
+{
+	struct stack *S = createStack(number of nodes in tree);
+	tnode *cur = root;
+	
+	push(S, cur);
+	while(!isEmpty(S)) {
+		cur = pop(S);
+		printf("%d\t", cur);
+		if(cur->right) 
+			push(S, cur->right);
+		if(cur->left)
+			push(S, cur->left);
+	}
+}
+
+D) Level order traversal
+   I flunked once in Facebook interview for solving this in BFS approach (i.e using Queues). Itseems I was supposed to use DFS (i.e stacks). But it is unclear that priority was 
+   given to space complexity over time complexity. I believe it was foolish of the interviewer to expect DFS for a concept which is BFS. 
+   
+   /* its same as preorder traversal except that you use queues instead of stack & push the left child first & then the right child */
+   void levelorder(tnode *root)
+   {
+   	struct queue *Q = createQueue(size = number of elements of tree);
+	/* It is understood that dequeue happens from front & enqueue happens at tail */
+	tnode *cur = root;
+	enqueue(Q, cur);
+	while (!isEmpty(Q)) {
+		cur = dequeue(Q);
+		printf("%d\t", cur);
+		if (cur->left) {
+			enqueue(Q, cur->left);
+		}
+		if (cur->right) {
+			enqueue(Q, cur->right)
+		}
+	}
+  }
+	
+			
