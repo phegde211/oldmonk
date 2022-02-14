@@ -369,4 +369,17 @@ D) Level order traversal
 	}
   }
 	
-			
+	
+9. Remove duplicate elements
+[2, 3, 3, 3, 6, 9, 9] -> [2, 3, 6, 9]
+nr = non-repeated.
+void rem_dup(int *a, int len)
+{
+	int nr = 1;
+	for(int i = 1; i < len; i++) {
+		if (a[nr-1] != a[i]) {
+			a[nr] = a[i];
+			nr++;
+		}
+	}
+}
