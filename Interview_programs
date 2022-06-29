@@ -405,8 +405,79 @@ void func(int *a, int len)
  }
       		
 		
+11. You have the below read function which returns data in a character buffer (0 to 4000 bytes) with the return value conveying 
+   the amount of bytes filled in the buffer. 
+
+Size = read(buf);
+Void your_fucntion()
+{
+     Char buf[4000];
+     Uint size;
+
+     While (1) {
+           Size = read(buf);
+            /* . . .  your code here . . . */
+    }
+}
+
+Problem has 2 parts:
+a) Ask is to store the data in a chain of linked list node (each node with a max capacity of 100 bytes).  
+b) During any read call, the buffer may contain end of message (denoted by character ‘;’) after which there is no 
+further data during that read call. In such a case the current linked list node should copy data only till the 
+end of message & stop even if it has space left to copy more. The next subsequent read would start with the 
+next new message which gets copied into the next linked list node. Same process continues. 
 
 
+#define MAXLEN 100
+struct lnode {
+	char data[MAXLEN];
+	struct lnode *next;
+	ushort dlen, eom;
+};
 
+void myread()
+{
+    char buf[1024];
+    uint sie, ptr, len;
+    struct lnode *node = NULL;
+    size = read(client_skt, buf, err);
+    ptr = 0;
+    while (size > 0) {
+    	if (tail && !tail->eom) {
+		len = min(size, (MAXLEN - tail->dlen));
+		helper(tail, buf+ptr, len);
+	} else {
+		/* tail will be NULL on for 1st entry */
+		len = min(size, MAXLEN);
+		node = helper(NULL, buf+ptr, len);
+	}
+	ptr += len;
+	size -= len;
+	if(tail) {
+		tail->next = node;
+	} else {
+		tail = node;
+	}
+	if (!head) 
+		head = tail;
+    }
+    
+struct lnode *helper( struct lnode *node, char *buf, uint len)
+{
+	if(node) {
+		if((MAXLEN - node->dlen) < len) {
+			printf("Error\n");
+			return node;
+		}
+	}
+	node = (node) ? node : createnode();
+	memcpy(&node->data[node->dlen], buf, len);
+	node->dlen += len;
+	if(node->data[node->dlen] == ';')
+		node->eom = 1;
+	
+	return node;
+}
 
+[Note: This was written in a hurry, check for correctness]
 
